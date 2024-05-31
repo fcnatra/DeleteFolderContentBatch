@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "name": "C#: DeleteFolderContent",
+            "type": "dotnet",
+            "request": "launch",
+            "projectPath": "${workspaceFolder}\\DeleteFolderContent\\DeleteFolderContent.csproj",
+            "launchConfigurationId": "TargetFramework=;DeleteFolderContent"
+        }
+    ]
+}
