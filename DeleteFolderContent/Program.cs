@@ -61,6 +61,7 @@ internal class Program
                 DeleteContentInFolder(_executionParams.FolderToClean);
                 displayCurrentFreeSpace();
             }
+            Console.Title = $"NEXT RUN: {DateTime.Now.AddMinutes(_executionParams.CheckPeriodInMin).ToShortTimeString()}";
             Thread.Sleep(checkFrequency);
         }
     }
