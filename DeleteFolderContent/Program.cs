@@ -10,7 +10,13 @@ internal class Program
         InvalidArguments = 2
     }
 
-    internal static ExecutionParams _executionParams = new();
+    private record ExecutionParams {
+        public uint MinFreeSpaceGb { get; set; }
+        public string FolderToClean { get; set; } = "NUL";
+        public uint CheckPeriodInMin { get; set; } = 60;
+    }
+
+    private static ExecutionParams _executionParams = new();
 
     private static int Main(string[] args)
     {
@@ -42,8 +48,9 @@ internal class Program
         var driveInfo = new DriveInfo(Path.GetFullPath(_executionParams.FolderToClean));
         var checkFrequency = new TimeSpan(0, (int)_executionParams.CheckPeriodInMin, 0);
         long freeSpaceGb() => driveInfo.TotalFreeSpace / oneGb;
+        void displayCurrentFreeSpace() => Console.WriteLine($"Current free space: {freeSpaceGb()} Gb");
 
-        Console.WriteLine($"Current free space: {freeSpaceGb()}");
+        displayCurrentFreeSpace();
 
         while (true)
         {
@@ -52,7 +59,7 @@ internal class Program
                 Console.WriteLine($"{DateTime.Now} FreeSpace in {driveInfo.RootDirectory} ({freeSpaceGb()} GB) is below the minimum specified ({_executionParams.MinFreeSpaceGb} GB)");
                 Console.WriteLine($"Proceeding to clean the content of: {_executionParams.FolderToClean}");
                 DeleteContentInFolder(_executionParams.FolderToClean);
-                Console.WriteLine($"Current free space: {freeSpaceGb()}");
+                displayCurrentFreeSpace();
             }
             Thread.Sleep(checkFrequency);
         }
@@ -113,10 +120,4 @@ internal class Program
         Console.WriteLine("|\n| Example: - remove all in C\\Temp once C:\\ is below 50Gb");
         Console.WriteLine($"|\t{programName} 50 C:\\Temp\n");
     }
-}
-
-internal record ExecutionParams {
-    public uint MinFreeSpaceGb { get; set; }
-    public string FolderToClean { get; set; } = "NUL";
-    public uint CheckPeriodInMin { get; set; } = 1;
 }
