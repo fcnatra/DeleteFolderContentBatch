@@ -69,7 +69,8 @@ internal class Program
     private static void DeleteContentInFolder(string folderToClean)
     {
         var pathToClean = Path.Combine(folderToClean, "*.*");
-        Process.Start($"cmd", $"/c del /q /s {pathToClean} 1> NUL 2> NUL").WaitForExit();
+        Process.Start("cmd", $"/c del /q /s {pathToClean} 1> NUL 2> NUL").WaitForExit();
+        Process.Start("cmd", $"/c for /d %x in ({folderToClean}\\*) do @rd /s /q \"%x\" 1> NUL 2> NUL").WaitForExit();
     }
 
     private static ExitCodeResult ValidateArguments(string[] args)
